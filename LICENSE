@@ -1,4 +1,4 @@
-                    GNU AFFERO GENERAL PUBLIC LICENSE
+pop                    GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -659,3 +659,382 @@ specific requirements.
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU AGPL, see
 <https://www.gnu.org/licenses/>.
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">نيو لهفة للمفروشات - New Lahfa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --silver: #E0E0E0;
+            --card-bg: #1E1E1E;
+            --text-main: #FFFFFF;
+            --danger: #FF5252;
+            --success: #4CAF50;
+            --info: #2196F3;
+            --warning: #FF9800;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 15px; padding-bottom: 80px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        /* التبويبات */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* الهيدر العلوي */
+        .header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); margin-bottom: 20px; }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { background: var(--gold); color: #000; width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+        .store-title h1 { font-size: 18px; color: var(--gold); }
+        .store-title p { font-size: 12px; color: var(--silver); }
+
+        /* إحصائيات سريعة (3 خانات) */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid #333; text-align: center; }
+        .stat-card h3 { font-size: 13px; color: var(--silver); margin-bottom: 5px; }
+        .stat-card p { font-size: 18px; font-weight: bold; color: var(--gold); }
+
+        /* البطاقات والنماذج */
+        .card { background: var(--card-bg); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: var(--gold-light); font-weight: 600; font-size: 14px; }
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #444; background: #2A2A2A; color: #FFF; font-size: 15px;
+        }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
+
+        /* شريط البحث والأقسام */
+        .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #2A2A2A; color: #FFF; font-size: 15px; margin-bottom: 15px; }
+        .categories-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+        .cat-btn { background: #2A2A2A; color: var(--silver); border: 1px solid #444; padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; transition: 0.2s; }
+        .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; border-color: var(--gold); }
+
+        /* شبكة المنتجات والأقسام والعمال */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+        .product-card { background: var(--card-bg); border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card h3 { font-size: 16px; color: #FFF; margin-bottom: 5px; }
+        .product-info { font-size: 13px; color: var(--silver); margin-bottom: 8px; }
+        .product-price { font-size: 16px; font-weight: bold; color: var(--gold); margin-bottom: 10px; }
+        
+        .btn { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: bold; color: #fff; }
+        .btn-edit { background: var(--info); }
+        .btn-delete { background: var(--danger); }
+        .btn-save { background: var(--success); }
+        .btn-cancel { background: #666; }
+        .btn-primary { background: linear-gradient(135deg, var(--gold), #AA771C); color: #000; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; width: 100%; transition: 0.3s; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-add { background: var(--gold); color: #000; width: 100%; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; margin-bottom: 20px; cursor: pointer; border: none; }
+
+        .category-item, .worker-card { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #2A2A2A; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid var(--gold); }
+        .worker-card.inactive { border-right-color: var(--danger); opacity: 0.75; }
+
+        /* شريط التنقل السفلي */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #181818; border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { background: none; border: none; color: var(--silver); font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: var(--gold); font-weight: bold; }
+        
+        /* رابط العمال */
+        .worker-link-box { background: #222; border: 1px dashed var(--gold); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .worker-link-box input { width: 85%; padding: 8px; background: #111; border: 1px solid #444; color: var(--gold); border-radius: 6px; margin-top: 8px; text-align: center; direction: ltr; font-size: 13px; }
+        .btn-copy { background: var(--gold); color: #000; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- الهيدر -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon">NL</div>
+            <div class="store-title">
+                <h1 id="headerStoreName">نيو لهفة للمفروشات</h1>
+                <p>NEW LAHFA • EGP</p>
+            </div>
+        </div>
+        <div>
+            <span id="roleBadge" style="background: rgba(76,175,80,0.15); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">حساب المدير</span>
+        </div>
+    </div>
+
+    <!-- ================= تبويب المنتجات ================= -->
+    <div id="tab-products" class="tab-content active">
+        <div class="stats-grid">
+            <div class="stat-card"><h3>إجمالي المنتجات</h3><p id="totalProducts">0</p></div>
+            <div class="stat-card"><h3>عدد الأقسام</h3><p id="totalCategoriesCount">7</p></div>
+            <div class="stat-card"><h3>مخزون منخفض</h3><p id="lowStockCount" style="color: var(--danger);">0</p></div>
+        </div>
+
+        <div class="worker-link-box" id="adminShareSection">
+            <p style="font-size: 14px; color: var(--gold-light);">🔗 رابط مخصص للعمال (للعرض والبحث فقط):</p>
+            <input type="text" id="workerShareLink" readonly onclick="this.select()">
+            <br>
+            <button class="btn-copy" onclick="copyWorkerLink()">نسخ الرابط للعمال</button>
+        </div>
+
+        <button class="btn-add" id="addProductBtn" onclick="openAddProductModal()">+ إضافة صنف جديد للمفروشات</button>
+
+        <input type="text" id="searchInput" class="search-box" placeholder="ابحث باسم الصنف أو الكود..." oninput="renderProducts()">
+        <div class="categories-scroll" id="categoriesScrollContainer">
+            <!-- تتعبأ تلقائياً -->
+        </div>
+
+        <div class="products-grid" id="productsContainer"></div>
+    </div>
+
+    <!-- ================= تبويب الأقسام ================= -->
+    <div id="tab-categories" class="tab-content">
+        <div class="card">
+            <h2 style="color: var(--gold); font-size: 18px; margin-bottom: 15px;">إضافة قسم جديد</h2>
+            <form onsubmit="addCategory(event)">
+                <div class="form-group">
+                    <label>اسم القسم الجديد</label>
+                    <input type="text" id="newCategoryInput" placeholder="مثال: أطقم سرير فخمة..." required>
+                </div>
+                <button type="submit" class="btn-primary">+ إضافة القسم</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="color: var(--gold); font-size: 18px; margin-bottom: 15px;">الأقسام الحالية</h2>
+            <div id="categoriesListContainer"></div>
+        </div>
+    </div>
+
+    <!-- ================= تبويب الموظفون والإعدادات ================= -->
+    <div id="tab-settings" class="tab-content">
+        <div class="card">
+            <h2 style="color: var(--gold); font-size: 18px; margin-bottom: 15px;">تغيير اسم الموقع / المحل</h2>
+            <form onsubmit="saveSiteSettings(event)">
+                <div class="form-group">
+                    <label>الاسم الظاهر للمحل</label>
+                    <input type="text" id="siteNameInput" required>
+                </div>
+                <button type="submit" class="btn-primary">حفظ اسم الموقع الجديد</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="color: var(--gold); font-size: 18px; margin-bottom: 15px;">إضافة حساب عامل جديد (بالـ Gmail)</h2>
+            <form onsubmit="addWorker(event)">
+                <div class="form-group"><label>اسم العامل</label><input type="text" id="workerName" required></div>
+                <div class="form-group"><label>البريد الإلكتروني (Gmail)</label><input type="email" id="workerEmail" dir="ltr" style="text-align:right;" placeholder="example@gmail.com" required></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="password" id="workerPass" required></div>
+                <button type="submit" class="btn-primary">+ إنشاء حساب العامل</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="color: var(--gold); font-size: 18px; margin-bottom: 15px;">حسابات العمال المسجلين</h2>
+            <div id="workersListContainer"></div>
+        </div>
+    </div>
+</div>
+
+<!-- شريط التنقل السفلي -->
+<div class="nav-bar" id="bottomNav">
+    <button class="nav-item active" onclick="switchTab('products', this)"><span>📦</span>المنتجات</button>
+    <button class="nav-item" onclick="switchTab('categories', this)"><span>🏷️</span>الأقسام</button>
+    <button class="nav-item" onclick="switchTab('settings', this)"><span>👥</span>الموظفون</button>
+</div>
+
+<script>
+    // الإعدادات واسم الموقع
+    let storeName = localStorage.getItem('lahfa_site_name') || "نيو لهفة للمفروشات - New Lahfa";
+    document.getElementById('pageTitle').textContent = storeName;
+    document.getElementById('headerStoreName').textContent = storeName;
+    document.getElementById('siteNameInput').value = storeName;
+
+    function saveSiteSettings(e) {
+        e.preventDefault();
+        const val = document.getElementById('siteNameInput').value.trim();
+        if(!val) return;
+        localStorage.setItem('lahfa_site_name', val);
+        location.reload();
+    }
+
+    // وضع العمال عبر الرابط
+    const urlParams = new URLSearchParams(window.location.search);
+    const isWorkerMode = urlParams.get('mode') === 'worker';
+    if(isWorkerMode) {
+        document.getElementById('adminShareSection').style.display = 'none';
+        document.getElementById('addProductBtn').style.display = 'none';
+        document.getElementById('bottomNav').style.display = 'none';
+        const badge = document.getElementById('roleBadge');
+        badge.textContent = 'وضع العمال (عرض فقط)';
+        badge.style.color = '#D4AF37';
+        badge.style.background = 'rgba(212, 175, 55, 0.15)';
+    }
+
+    document.getElementById('workerShareLink').value = window.location.href.split('?')[0] + "?mode=worker";
+    function copyWorkerLink() {
+        const copyText = document.getElementById("workerShareLink");
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+        alert("تم نسخ رابط العمال بنجاح!");
+    }
+
+    // التنقل بين التبويبات
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+    }
+
+    // بيانات الأقسام
+    let categories = JSON.parse(localStorage.getItem('lahfa_categories')) || [
+        "أطقم السرير", "أطقم الأطفال", "الكوفرتات", "اللحاف", "الدفايات", "أطقم الفوط", "المفروشات الأخرى"
+    ];
+    let currentCategory = "الكل";
+    let editingCatIndex = null;
+
+    function renderCategories() {
+        // تفريغ شريط الأقسام في المنتجات
+        const scrollCont = document.getElementById('categoriesScrollContainer');
+        scrollCont.innerHTML = `<button class="cat-btn ${currentCategory==='الكل'?'active':''}" onclick="filterByCategory('الكل', this)">الكل</button>`;
+        categories.forEach(cat => {
+            scrollCont.innerHTML += `<button class="cat-btn ${currentCategory===cat?'active':''}" onclick="filterByCategory('${cat}', this)">${cat}</button>`;
+        });
+
+        document.getElementById('totalCategoriesCount').textContent = categories.length;
+
+        // قائمة إدارة الأقسام
+        const listCont = document.getElementById('categoriesListContainer');
+        listCont.innerHTML = categories.length === 0 ? '<p style="color:#888; text-align:center;">لا توجد أقسام.</p>' : '';
+        categories.forEach((cat, idx) => {
+            if(editingCatIndex === idx) {
+                listCont.innerHTML += `
+                    <div class="category-item">
+                        <input type="text" id="editCat_${idx}" value="${cat}" style="padding:6px;">
+                        <button class="btn btn-save" onclick="saveEditCat(${idx})">حفظ</button>
+                        <button class="btn btn-cancel" onclick="editingCatIndex=null; renderCategories();">إلغاء</button>
+                    </div>`;
+            } else {
+                listCont.innerHTML += `
+                    <div class="category-item">
+                        <span>${cat}</span>
+                        <div>
+                            <button class="btn btn-edit" onclick="editingCatIndex=${idx}; renderCategories();">تعديل</button>
+                            <button class="btn btn-delete" onclick="deleteCategory(${idx})">حذف</button>
+                        </div>
+                    </div>`;
+            }
+        });
+        localStorage.setItem('lahfa_categories', JSON.stringify(categories));
+    }
+
+    function addCategory(e) {
+        e.preventDefault();
+        const val = document.getElementById('newCategoryInput').value.trim();
+        if(!val || categories.includes(val)) return alert('القسم موجود مسبقاً أو فارغ!');
+        categories.push(val);
+        document.getElementById('newCategoryInput').value = '';
+        renderCategories();
+    }
+
+    function saveEditCat(idx) {
+        const val = document.getElementById(`editCat_${idx}`).value.trim();
+        if(!val) return;
+        categories[idx] = val;
+        editingCatIndex = null;
+        renderCategories();
+        renderProducts();
+    }
+
+    function deleteCategory(idx) {
+        if(confirm('هل أنت متأكد من حذف القسم؟')) {
+            categories.splice(idx, 1);
+            renderCategories();
+        }
+    }
+
+    function filterByCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProducts();
+    }
+
+    // بيانات المنتجات
+    let products = JSON.parse(localStorage.getItem('lahfa_products')) || [
+        { id: "NL-6001", name: "طقم فوطه 6 قطع مطرز قطن", category: "أطقم الفوط", price: 1800, stock: 4 },
+        { id: "NL-4001", name: "لحاف فايبر شتوى فاخر", category: "اللحاف", price: 2300, stock: 10 },
+        { id: "NL-3001", name: "كوفرتة ستان مطرزة كينج", category: "الكوفرتات", price: 1850, stock: 5 }
+    ];
+
+    function renderProducts() {
+        const container = document.getElementById('productsContainer');
+        container.innerHTML = '';
+
+        let filtered = currentCategory === "الكل" ? products : products.filter(p => p.category === currentCategory);
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        if(query) filtered = filtered.filter(p => p.name.toLowerCase().includes(query) || p.id.toLowerCase().includes(query));
+
+        document.getElementById('totalProducts').textContent = products.length;
+        document.getElementById('lowStockCount').textContent = products.filter(p => Number(p.stock) <= 3).length;
+
+        if(filtered.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #888; grid-column: 1/-1; padding: 20px;">لا توجد أصناف مطابقة.</p>';
+            return;
+        }
+
+        filtered.forEach((p, index) => {
+            const actions = isWorkerMode ? '' : `
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                    <button class="btn btn-edit" onclick="editProduct(${index})">تعديل</button>
+                    <button class="btn btn-delete" onclick="deleteProduct(${index})">حذف</button>
+                </div>`;
+            
+            container.innerHTML += `
+                <div class="product-card">
+                    <div>
+                        <span style="font-size:11px; color:var(--gold); background:rgba(212,175,55,0.1); padding:2px 6px; border-radius:4px;">${p.id}</span>
+                        <h3>${p.name}</h3>
+                        <p class="product-info">القسم: ${p.category} | الكمية: <b style="color:${p.stock<=3?'#FF5252':'#FFF'}">${p.stock}</b></p>
+                    </div>
+                    <div>
+                        <div class="product-price">${Number(p.price).toLocaleString()} ج.م</div>
+                        ${actions}
+                    </div>
+                </div>`;
+        });
+        localStorage.setItem('lahfa_products', JSON.stringify(products));
+    }
+
+    function openAddProductModal() {
+        const name = prompt("اسم الصنف الجديد:");
+        if(!name) return;
+        const cat = prompt("اسم القسم:", categories[0] || "أطقم السرير");
+        const price = prompt("السعر بالجنيه المصري:", "1500");
+        const stock = prompt("الكمية بالمخزون:", "10");
+        products.push({ id: "NL-" + Math.floor(1000 + Math.random()*9000), name, category: cat, price: Number(price)||0, stock: Number(stock)||0 });
+        renderProducts();
+    }
+
+    function deleteProduct(i) {
+        if(confirm('حذف هذا الصنف؟')) { products.splice(i, 1); renderProducts(); }
+    }
+
+    function editProduct(i) {
+        const p = products[i];
+        const name = prompt("تعديل الاسم:", p.name);
+        const price = prompt("تعديل السعر:", p.price);
+        const stock = prompt("تعديل الكمية:", p.stock);
+        if(name !== null) p.name = name;
+        if(price !== null) p.price = Number(price);
+        if(stock !== null) p.stock = Number(stock);
+        renderProducts();
+    }
+
+    // بيانات العمال
+    let workers = JSON.parse(localStorage.getItem('lahfa_workers')) || [];
+    function renderWorkers() {
+        const cont = document.getElementById('workersListContainer');
+        cont.innerHTML = workers.length === 0 ? '<p style="color:#888; text-align:center;">لا يوجد عمال.</p>' : '';
+        workers.forEach((w, idx)
