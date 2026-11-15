@@ -1415,4 +1415,366 @@ For more information on this, and how to apply and follow the GNU AGPL, see
     function renderWorkers() {
         const cont = document.getElementById('workersListContainer');
         cont.innerHTML = workers.length === 0 ? '<p style="color:#888; text-align:center;">لا يوجد عمال.</p>' : '';
-        workers.forEach((w, idx)
+        workers.forEach((w, idx) <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">نيو لهفة للمفروشات - New Lahfa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --silver: #E0E0E0;
+            --card-bg: #1E1E1E;
+            --input-bg: #2A2A2A;
+            --text-main: #FFFFFF;
+            --border-color: rgba(212, 175, 55, 0.3);
+            --danger: #FF5252;
+            --success: #4CAF50;
+            --info: #2196F3;
+            --warning: #FF9800;
+        }
+
+        /* ثيم فضي وذهبي */
+        body.theme-silver {
+            --bg-dark: #1C2026;
+            --card-bg: #262B33;
+            --input-bg: #323842;
+            --silver: #CFD8DC;
+        }
+
+        /* ثيم فاتح */
+        body.theme-light {
+            --bg-dark: #F4F5F7;
+            --card-bg: #FFFFFF;
+            --input-bg: #F0F2F5;
+            --text-main: #1A1A1A;
+            --silver: #555555;
+            --gold-light: #9E7B1C;
+            --border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 15px; padding-bottom: 85px; transition: 0.3s; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        /* التبويبات */
+        .tab-content { display: none; animation: fadeIn 0.25s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* الهيدر العلوي */
+        .header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { background: linear-gradient(135deg, var(--gold), #AA771C); color: #000; width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+        .store-title h1 { font-size: 18px; color: var(--gold); }
+        .store-title p { font-size: 12px; color: var(--silver); }
+
+        /* إحصائيات سريعة */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center; }
+        .stat-card h3 { font-size: 13px; color: var(--silver); margin-bottom: 5px; }
+        .stat-card p { font-size: 18px; font-weight: bold; color: var(--gold); }
+
+        /* البطاقات والنماذج */
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card h2 { color: var(--gold); font-size: 17px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: var(--gold-light); font-weight: 600; font-size: 14px; }
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], select {
+            width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #555; background: var(--input-bg); color: var(--text-main); font-size: 15px;
+        }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
+
+        .checkbox-row { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; margin-top: 8px; }
+        .checkbox-row input { width: 18px; height: 18px; accent-color: var(--gold); }
+
+        /* شريط البحث والأقسام */
+        .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #555; background: var(--input-bg); color: var(--text-main); font-size: 15px; margin-bottom: 15px; }
+        .categories-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+        .cat-btn { background: var(--input-bg); color: var(--silver); border: 1px solid #555; padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; transition: 0.2s; }
+        .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; border-color: var(--gold); }
+
+        /* شبكة المنتجات */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+        .product-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card h3 { font-size: 16px; color: var(--text-main); margin-bottom: 5px; }
+        .product-info { font-size: 13px; color: var(--silver); margin-bottom: 8px; }
+        .product-price { font-size: 16px; font-weight: bold; color: var(--gold); margin-bottom: 10px; }
+        
+        .btn { padding: 7px 13px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: bold; color: #fff; }
+        .btn-edit { background: var(--info); }
+        .btn-delete { background: var(--danger); }
+        .btn-save { background: var(--success); }
+        .btn-cancel { background: #666; }
+        .btn-primary { background: linear-gradient(135deg, var(--gold), #AA771C); color: #000; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; width: 100%; transition: 0.3s; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--gold); padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; width: 100%; }
+        .btn-add { background: var(--gold); color: #000; width: 100%; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; margin-bottom: 20px; cursor: pointer; border: none; }
+
+        .category-item, .worker-card { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--input-bg); padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid var(--gold); }
+        .worker-card.inactive { border-right-color: var(--danger); opacity: 0.75; }
+
+        /* شريط التنقل السفلي */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { background: none; border: none; color: var(--silver); font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .nav-item span { font-size: 18px; }
+        .nav-item.active { color: var(--gold); font-weight: bold; }
+        
+        /* رابط العمال */
+        .worker-link-box { background: var(--card-bg); border: 1px dashed var(--gold); padding: 14px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .worker-link-box input { width: 90%; padding: 8px; background: var(--input-bg); border: 1px solid #555; color: var(--gold); border-radius: 6px; margin-top: 8px; text-align: center; direction: ltr; font-size: 13px; }
+        .btn-copy { background: var(--gold); color: #000; border: none; padding: 7px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 13px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- الهيدر -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon" id="headerLogoText">NL</div>
+            <div class="store-title">
+                <h1 id="headerStoreName">نيو لهفة للمفروشات</h1>
+                <p id="headerSubTitle">NEW LAHFA • EGP</p>
+            </div>
+        </div>
+        <div>
+            <span id="roleBadge" style="background: rgba(76,175,80,0.15); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">حساب المدير</span>
+        </div>
+    </div>
+
+    <!-- ================= 1. تبويب المنتجات ================= -->
+    <div id="tab-products" class="tab-content active">
+        <div class="stats-grid">
+            <div class="stat-card"><h3>إجمالي المنتجات</h3><p id="totalProducts">0</p></div>
+            <div class="stat-card"><h3>عدد الأقسام</h3><p id="totalCategoriesCount">7</p></div>
+            <div class="stat-card"><h3>مخزون منخفض</h3><p id="lowStockCount" style="color: var(--danger);">0</p></div>
+        </div>
+
+        <div class="worker-link-box" id="adminShareSection">
+            <p style="font-size: 14px; color: var(--gold-light);">🔗 رابط مخصص للعمال (للعرض والبحث فقط):</p>
+            <input type="text" id="workerShareLink" readonly onclick="this.select()">
+            <br>
+            <button class="btn-copy" onclick="copyWorkerLink()">نسخ الرابط للعمال</button>
+        </div>
+
+        <button class="btn-add" id="addProductBtn" onclick="openAddProductModal()">+ إضافة صنف جديد للمفروشات</button>
+
+        <input type="text" id="searchInput" class="search-box" placeholder="ابحث باسم الصنف أو الكود..." oninput="renderProducts()">
+        <div class="categories-scroll" id="categoriesScrollContainer"></div>
+        <div class="products-grid" id="productsContainer"></div>
+    </div>
+
+    <!-- ================= 2. تبويب الأقسام ================= -->
+    <div id="tab-categories" class="tab-content">
+        <div class="card">
+            <h2>🏷️ إضافة قسم جديد</h2>
+            <form onsubmit="addCategory(event)">
+                <div class="form-group">
+                    <label>اسم القسم الجديد</label>
+                    <input type="text" id="newCategoryInput" placeholder="مثال: أطقم سرير فخمة..." required>
+                </div>
+                <button type="submit" class="btn-primary">+ إضافة القسم</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📂 الأقسام الحالية</h2>
+            <div id="categoriesListContainer"></div>
+        </div>
+    </div>
+
+    <!-- ================= 3. تبويب الموظفون ================= -->
+    <div id="tab-workers" class="tab-content">
+        <div class="card">
+            <h2>👤 إضافة حساب عامل جديد (بالـ Gmail)</h2>
+            <form onsubmit="addWorker(event)">
+                <div class="form-group"><label>اسم العامل</label><input type="text" id="workerName" placeholder="مثال: محمد أحمد" required></div>
+                <div class="form-group"><label>البريد الإلكتروني (Gmail)</label><input type="email" id="workerEmail" dir="ltr" style="text-align:right;" placeholder="example@gmail.com" required></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="password" id="workerPass" placeholder="••••••••" required></div>
+                <button type="submit" class="btn-primary">+ إنشاء حساب العامل</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>👥 حسابات العمال المسجلين</h2>
+            <div id="workersListContainer"></div>
+        </div>
+    </div>
+
+    <!-- ================= 4. تبويب إعدادات الموقع ================= -->
+    <div id="tab-settings" class="tab-content">
+        <!-- إعدادات الهوية -->
+        <div class="card">
+            <h2>🏪 إعدادات هوية المحل</h2>
+            <form onsubmit="saveGeneralSettings(event)">
+                <div class="form-group">
+                    <label>اسم الموقع / المحل الظاهر</label>
+                    <input type="text" id="setStoreName" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>حروف الشعار (اللوجو)</label>
+                        <input type="text" id="setLogoLetters" maxlength="3" placeholder="NL" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم هاتف المحل / واتساب</label>
+                        <input type="tel" id="setStorePhone" placeholder="010xxxxxxxx">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>مظهر وألوان التطبيق</label>
+                    <select id="setTheme">
+                        <option value="dark">أسود ملكي وذهبي (الافتراضي)</option>
+                        <option value="silver">فضي داكن وذهبي</option>
+                        <option value="light">وضع نهاري فاتح</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">💾 حفظ إعدادات الهوية والمظهر</button>
+            </form>
+        </div>
+
+        <!-- إعدادات المخزون والعمال -->
+        <div class="card">
+            <h2>📦 إعدادات المخزون وصلاحيات العرض</h2>
+            <form onsubmit="saveInventorySettings(event)">
+                <div class="form-group">
+                    <label>التنبيه بـ "مخزون منخفض" عندما تقل الكمية عن أو تساوي:</label>
+                    <input type="number" id="setLowStockThreshold" min="1" max="100" required>
+                </div>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="setShowStockToWorkers">
+                    <span>السماح للعمال برؤية عدد القطع المتوفرة في المخزون</span>
+                </label>
+                <br>
+                <button type="submit" class="btn-primary">💾 حفظ إعدادات المخزون</button>
+            </form>
+        </div>
+
+        <!-- الأمان وكلمة المرور -->
+        <div class="card">
+            <h2>🔒 الأمان وقفل لوحة المدير</h2>
+            <form onsubmit="saveSecuritySettings(event)">
+                <label class="checkbox-row">
+                    <input type="checkbox" id="setRequireAdminPin">
+                    <span>طلب رمز مرور عند فتح الإعدادات أو إدارة الموظفين</span>
+                </label>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label>رمز مرور المدير (PIN)</label>
+                    <input type="password" id="setAdminPin" placeholder="الافتراضي: 123456">
+                </div>
+                <button type="submit" class="btn-primary">🔐 حفظ إعدادات الأمان</button>
+            </form>
+        </div>
+
+        <!-- النسخ الاحتياطي ونقل البيانات -->
+        <div class="card">
+            <h2>☁️ النسخ الاحتياطي ونقل البيانات</h2>
+            <p style="font-size: 13px; color: var(--silver); margin-bottom: 15px;">
+                احفظ نسخة من جميع المنتجات والأقسام والعمال على جهازك، أو استعدها على هاتف آخر في أي وقت.
+            </p>
+            <div class="grid-2">
+                <button type="button" class="btn-secondary" onclick="exportBackup()">⬇️ تحميل نسخة احتياطية</button>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('importFile').click()">⬆️ استعادة نسخة</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- شريط التنقل السفلي -->
+<div class="nav-bar" id="bottomNav">
+    <button class="nav-item active" onclick="switchTab('products', this)"><span>📦</span>المنتجات</button>
+    <button class="nav-item" onclick="switchTab('categories', this)"><span>🏷️</span>الأقسام</button>
+    <button class="nav-item" onclick="switchTab('workers', this, true)"><span>👥</span>الموظفون</button>
+    <button class="nav-item" onclick="switchTab('settings', this, true)"><span>⚙️</span>الإعدادات</button>
+</div>
+
+<script>
+    // ================= تحميل الإعدادات الافتراضية =================
+    let appSettings = JSON.parse(localStorage.getItem('lahfa_settings')) || {
+        storeName: "نيو لهفة للمفروشات - New Lahfa",
+        logoLetters: "NL",
+        storePhone: "",
+        theme: "dark",
+        lowStockThreshold: 3,
+        showStockToWorkers: true,
+        requireAdminPin: false,
+        adminPin: "123456"
+    };
+
+    let isAdminUnlocked = false;
+
+    function applySettings() {
+        document.getElementById('pageTitle').textContent = appSettings.storeName;
+        document.getElementById('headerStoreName').textContent = appSettings.storeName;
+        document.getElementById('headerLogoText').textContent = appSettings.logoLetters;
+        document.getElementById('headerSubTitle').textContent = appSettings.storePhone ? `هاتف: ${appSettings.storePhone} • EGP` : "NEW LAHFA • EGP";
+
+        // تطبيق المظهر
+        document.body.classList.remove('theme-silver', 'theme-light');
+        if (appSettings.theme === 'silver') document.body.classList.add('theme-silver');
+        if (appSettings.theme === 'light') document.body.classList.add('theme-light');
+
+        // تعبئة حقول الإعدادات
+        document.getElementById('setStoreName').value = appSettings.storeName;
+        document.getElementById('setLogoLetters').value = appSettings.logoLetters;
+        document.getElementById('setStorePhone').value = appSettings.storePhone;
+        document.getElementById('setTheme').value = appSettings.theme;
+        document.getElementById('setLowStockThreshold').value = appSettings.lowStockThreshold;
+        document.getElementById('setShowStockToWorkers').checked = appSettings.showStockToWorkers;
+        document.getElementById('setRequireAdminPin').checked = appSettings.requireAdminPin;
+        document.getElementById('setAdminPin').value = appSettings.adminPin;
+    }
+
+    function saveGeneralSettings(e) {
+        e.preventDefault();
+        appSettings.storeName = document.getElementById('setStoreName').value.trim();
+        appSettings.logoLetters = document.getElementById('setLogoLetters').value.trim() || "NL";
+        appSettings.storePhone = document.getElementById('setStorePhone').value.trim();
+        appSettings.theme = document.getElementById('setTheme').value;
+        saveSettingsToStorage("تم حفظ إعدادات الهوية والمظهر بنجاح!");
+    }
+
+    function saveInventorySettings(e) {
+        e.preventDefault();
+        appSettings.lowStockThreshold = Number(document.getElementById('setLowStockThreshold').value) || 3;
+        appSettings.showStockToWorkers = document.getElementById('setShowStockToWorkers').checked;
+        saveSettingsToStorage("تم حفظ إعدادات المخزون بنجاح!");
+        renderProducts();
+    }
+
+    function saveSecuritySettings(e) {
+        e.preventDefault();
+        appSettings.requireAdminPin = document.getElementById('setRequireAdminPin').checked;
+        const newPin = document.getElementById('setAdminPin').value.trim();
+        if (newPin) appSettings.adminPin = newPin;
+        saveSettingsToStorage("تم حفظ إعدادات الأمان بنجاح!");
+    }
+
+    function saveSettingsToStorage(msg) {
+        localStorage.setItem('lahfa_settings', JSON.stringify(appSettings));
+        applySettings();
+        alert(msg);
+    }
+
+    // ================= وضع العمال عبر الرابط =================
+    const urlParams = new URLSearchParams(window.location.search);
+    const isWorkerMode = urlParams.get('mode') === 'worker';
+    if (isWorkerMode) {
+        document.getElementById('adminShareSection').style.display = 'none';
+        document.getElementById('addProductBtn').style.display = 'none';
+        document.getElementById('bottomNav').style.display = 'none';
+        const badge = document.getElementById('roleBadge');
+        badge.textContent = 'وضع العمال (عرض فقط)';
+        badge.style.color = '#D4AF37';
+        badge.style.background = 'rgba(212, 175, 55, 0.15)';
+    }
+
+    document.getElementById('workerShareLink').value = win
